@@ -1,0 +1,59 @@
+{{/* print (index .Values "argocd-apps") */}}
+{{/* printf "%s" (index .Values "argocd-apps") */}}
+{{/*- if not (index .Values "argocd-apps" "applications") | default dict */}}
+{{- if not (index .Values "argocd-apps" "applications") }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Values.metadata.name }}
+  namespace: argocd
+spec:
+  destination:
+    namespace: {{ .Values.metadata.namespace }} 
+    server: {{ .Values.spec.destination.server }}
+  project: {{ .Values.spec.project }}
+  sources: 
+  {{- range $source := .Values.spec.sources }}
+  {{- if hasKey $source "helm"}}
+  - helm:
+    {{- if $source.helm.passCredentials }}
+      passCredentials: {{ $source.helm.passCredentials }}  
+    {{- end }}
+      valueFiles:
+      {{- range $source.helm.valueFiles }}
+      - {{ . }} {{- end }}
+    {{- if $source.path }}
+    path: {{ $source.path }}
+    {{- end }}
+    repoURL: {{ $source.repoURL }}
+    {{- if $source.chart }}
+    chart: {{ $source.chart }}
+    {{- end }}
+    targetRevision: {{ $source.targetRevision }}
+  {{- else }}
+  - ref: {{ $source.ref }}
+    repoURL: {{ $source.repoURL }}
+    targetRevision: {{ $source.targetRevision }}
+    {{- if $source.path }}
+    path: {{$source.path }}
+    {{- end }}
+  {{- end }}
+  {{- end }}
+  syncPolicy:
+    {{- if .Values.spec.syncPolicy.automated }}
+    automated:
+      prune: {{ .Values.spec.syncPolicy.prune }}
+      selfHeal: {{ .Values.spec.syncPolicy.selfHeal }}
+      allowEmpty: {{ .Values.spec.syncPolicy.allowEmpty }}
+      {{/* createNamespace: {{ .Values.spec.syncPolicy.createNamespace }} */}}
+    {{- end }}
+    syncOptions:
+    {{- if hasKey .Values.spec.syncPolicy "extraOptions" }}
+    {{- range .Values.spec.syncPolicy.extraOptions }}
+    - {{ . }}
+    {{- end }}
+    {{- end }}
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    - CreateNamespace=true
+{{- end }}

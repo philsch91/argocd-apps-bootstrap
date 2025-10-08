@@ -1,0 +1,23 @@
+# .gitignore argocd-apps-bootstrap
+
+## Files
+*.tgz
+*.zip
+*.tar.gz
+*.tar
+*.tgz
+*.bak
+*.swp
+*.swo
+*.DS_Store
+*.local
+
+## Helm
+Chart.lock
+
+## IDE
+.idea/
+.vscode/
+
+## Eclipse
+.project

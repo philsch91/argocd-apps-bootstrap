@@ -1,0 +1,58 @@
+---
+projects:
+  karpenter:
+    description: Project for custom Karpenter configuration
+    destinations:
+      - namespace: kube-system
+        server: https://kubernetes.default.svc
+      - namespace: default
+        server: https://kubernetes.default.svc
+    clusterResourceWhitelist:
+      - group: "karpenter.sh"
+        kind: NodePool
+    sourceRepos: ['*']
+  peerauthentication:
+    description: Project for custom PeerAuthentication resources
+    destinations:
+      - namespace: istio-system
+        server: https://kubernetes.default.svc
+    namespaceResourceWhitelist:
+      - group: "security.istio.io"
+        kind: "PeerAuthentication"
+      # - group: networking.k8s.io
+      #   kind: Ingress
+      # - group: apps
+      #   kind: Deployment
+      # - group: ""
+      #   kind: ConfigMap
+      # - group: ""
+      #   kind: Service
+      # - group: rbac.authorization.k8s.io
+      #   kind: Role
+    namespaceResourceBlacklist: []
+    sourceRepos: ['*']
+  istio:
+    description: Project for custom Istio resources
+    destinations:
+      - namespace: istio-system
+        server: https://kubernetes.default.svc
+    clusterResourceWhitelist:
+      - group: ''
+        kind: Namespace
+      # - group: '*'
+      #   kind: '*'
+    # namespaceResourceWhitelist:
+    #   - group: '*'
+    #     kind: '*'
+    sourceRepos: ['*']
+  windows-nodes:
+    description: Project for custom Windows nodes configuration
+    destinations:
+      - namespace: default
+        server: https://kubernetes.default.svc
+    clusterResourceWhitelist:
+      - group: "karpenter.sh"
+        kind: NodePool
+      - group: "karpenter.k8s.aws"
+        kind: "EC2NodeClass"
+    sourceRepos: ['*']

@@ -1,0 +1,25 @@
+---
+automated: true
+metadata:
+  name: karpenter-bootstrap
+  namespace: argocd
+spec:
+  stage: prod
+  destination:
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+    - helm:
+        valueFiles:
+          - $values/values.yaml
+      path: .
+      repoURL: https://hostname.tld/argocd-apps-bootstrap.git
+      targetRevision: main
+    - ref: values
+      repoURL: https://hostname.tld/argocd-apps-bootstrap.git
+      targetRevision: main
+  syncPolicy:
+    automated: true
+    prune: true
+    selfHeal: true
+    allowEmpty: false

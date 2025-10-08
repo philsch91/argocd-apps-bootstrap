@@ -1,0 +1,30 @@
+---
+argocd-apps:
+  applications:
+    karpenter-nonprod:
+      namespace: argocd
+      stage: dev
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: default
+      project: karpenter
+      sources:
+        - repoURL: https://hostname.tld/argocd-apps.git
+          path: apps/karpenter/manifests/nonprod
+          targetRevision: main
+      ignoreDifferences:
+      - group: karpenter.sh
+        kind: NodePool
+        jsonPointers:
+        - /spec/template/spec/nodeClassRef/group
+      syncPolicy:
+        automated:
+          # enabled: true
+          prune: true
+          selfHeal: false
+          allowEmpty: false
+        syncOptions:
+          - PrunePropagationPolicy=foreground
+          - PruneLast=true
+          - CreateNamespace=false
+          - ServerSideApply=false

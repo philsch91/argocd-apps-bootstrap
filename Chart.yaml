@@ -1,0 +1,10 @@
+apiVersion: v2
+name: argocd-apps-bootstrap
+description: A Helm chart for generating all ArgoCD Applications
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+dependencies:
+  - name: argocd-apps
+    repository: https://argoproj.github.io/argo-helm # https://charts.argoproj.io
+    version: 2.0.2
