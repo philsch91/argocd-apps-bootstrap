@@ -1,0 +1,21 @@
+---
+argocd-apps:
+  projects:
+    kubecost:
+      description: Project for Kubecost resources
+      destinations:
+        - namespace: kubecost
+          server: https://kubernetes.default.svc
+      namespaceResourceWhitelist:
+        - group: networking.k8s.io
+          kind: Ingress
+        - group: apps
+          kind: Deployment
+        - group: ""
+          kind: ConfigMap
+        - group: ""
+          kind: Service
+      sourceRepos: ['*']
+      clusterResourceWhitelist:
+        - group: '*'
+          kind: '*'

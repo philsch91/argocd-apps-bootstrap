@@ -1,7 +1,7 @@
 {{/* print (index .Values "argocd-apps") */}}
 {{/* printf "%s" (index .Values "argocd-apps") */}}
 {{/*- if not (index .Values "argocd-apps" "applications") | default dict */}}
-{{- if not (index .Values "argocd-apps" "applications") }}
+{{- if and (not (index .Values "argocd-apps" "projects")) (not (index .Values "argocd-apps" "applications")) }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

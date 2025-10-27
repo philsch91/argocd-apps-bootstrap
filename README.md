@@ -8,12 +8,15 @@ helm repo add argo https://argoproj.github.io/argo-helm
 helm -n argocd upgrade -i argocd-appprojects-bootstrap argo/argocd-apps --values values.projects.yaml
 # option 2
 helm -n argocd upgrade -i argocd-appprojects-bootstrap oci://ghcr.io/argoproj/argo-helm/argocd-apps --values values.projects.yaml
+# option 3
+helm -n argocd upgrade -i argocd-appprojects-bootstrap . --values values.apps.projects.yaml
 ```
 
 ## Template
 ```
+helm template <appproject-name>-bootstrap . --values /path/to/values.apps.projects.yaml --debug
 helm template <app-name>-bootstrap [<repo-name>/]<chart-name> | <folder> | . --values /path/to/values.bootstrap.yaml --debug
-helm template <app-name>-bootstrap [<repo-name>/]<chart-name> | <folder> | . --values /path/to/values.yaml --debug
+helm template <app-name>-bootstrap [<repo-name>/]<chart-name> | <folder> | . --values /path/to/values.apps.applications.yaml --debug
 ```
 
 ## Install and upgrade

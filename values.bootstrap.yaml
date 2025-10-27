@@ -11,7 +11,7 @@ spec:
   sources:
     - helm:
         valueFiles:
-          - $values/values.yaml
+          - $values/values.apps.applications.yaml
       path: .
       repoURL: https://hostname.tld/argocd-apps-bootstrap.git
       targetRevision: main
