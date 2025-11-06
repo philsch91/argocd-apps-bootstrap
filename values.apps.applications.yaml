@@ -24,7 +24,7 @@ argocd-apps:
           selfHeal: false
           allowEmpty: false
         syncOptions:
+          - CreateNamespace=false
           - PrunePropagationPolicy=foreground
           - PruneLast=true
-          - CreateNamespace=false
           - ServerSideApply=false

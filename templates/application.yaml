@@ -42,10 +42,10 @@ spec:
   syncPolicy:
     {{- if .Values.spec.syncPolicy.automated }}
     automated:
-      prune: {{ .Values.spec.syncPolicy.prune }}
-      selfHeal: {{ .Values.spec.syncPolicy.selfHeal }}
-      allowEmpty: {{ .Values.spec.syncPolicy.allowEmpty }}
-      {{/* createNamespace: {{ .Values.spec.syncPolicy.createNamespace }} */}}
+      {{/* enabled: {{ .Values.spec.syncPolicy.enabled }} # Enables automated syncing of the application, true by default */}}
+      prune: {{ .Values.spec.syncPolicy.prune }} # Specifies if non-defined resources in sources should be pruned during auto-syncing, false by default
+      selfHeal: {{ .Values.spec.syncPolicy.selfHeal }} # Specifies if partial app sync should be executed when resources are changed only in target Kubernetes cluster and no git change detected, false by default
+      allowEmpty: {{ .Values.spec.syncPolicy.allowEmpty }} # Allows deleting all application resources during automatic syncing, false by default
     {{- end }}
     syncOptions:
     {{- if hasKey .Values.spec.syncPolicy "extraOptions" }}
@@ -53,7 +53,14 @@ spec:
     - {{ . }}
     {{- end }}
     {{- end }}
-    - PrunePropagationPolicy=foreground
-    - PruneLast=true
-    - CreateNamespace=true
+    # - Validate=false # Disable resource validation, equivalent to 'kubectl apply --validate=false', true by default
+    - CreateNamespace=true # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster
+    - PrunePropagationPolicy=foreground # Supported policies are background, foreground and orphan
+    - PruneLast=true # Allow the ability for resource pruning to happen as a final, implicit wave of a sync operation. For timing of pruning operations if .spec.syncPolicy.automated.prune is set to true
+    # - RespectIgnoreDifferences=true # When syncing changes, respect fields ignored by the ignoreDifferences configuration
+    # - ApplyOutOfSyncOnly=true # Sync only out-of-sync resources, rather than applying every object in the application
+    # - SkipDryRunOnMissingResource=true # Allow skip dry run on missing resource
+    # - Replace=true # Argo CD will use 'kubectl replace' or 'kubectl create' command to apply changes
+    # - ServerSideApply=false # Argo CD will use 'kubectl apply --server-side' command to apply changes, not relying on .metadata.annotations.kubectl.kubernetes.io/last-applied-configuration
+    # - Prune=false # Not supported in .spec.syncPolicy.syncOptions, prevent objects from being pruned with .metadata.annotations.argocd.argoproj.io/sync-options: Prune=false
 {{- end }}
