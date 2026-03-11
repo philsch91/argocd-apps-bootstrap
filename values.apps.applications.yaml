@@ -3,7 +3,6 @@ argocd-apps:
   applications:
     karpenter-nonprod:
       namespace: argocd
-      stage: dev
       destination:
         server: https://kubernetes.default.svc
         namespace: default
@@ -23,8 +22,12 @@ argocd-apps:
           prune: true
           selfHeal: false
           allowEmpty: false
+        managedNamespaceMetadata:
+          labels:
+            managed-by: argocd
         syncOptions:
-          - CreateNamespace=false
+          - CreateNamespace=true
           - PrunePropagationPolicy=foreground
-          - PruneLast=true
-          - ServerSideApply=false
+          - Prune=false
+          - PruneLast=false
+          - ServerSideApply=true
