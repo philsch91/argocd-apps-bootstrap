@@ -4,7 +4,6 @@ metadata:
   name: karpenter-bootstrap
   namespace: argocd
 spec:
-  stage: prod
   destination:
     server: https://kubernetes.default.svc
   project: default
@@ -20,6 +19,6 @@ spec:
       targetRevision: main
   syncPolicy:
     automated: true
-    prune: true
     selfHeal: true
+    prune: true
     allowEmpty: false
