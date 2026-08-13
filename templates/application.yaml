@@ -9,6 +9,7 @@ metadata:
   namespace: argocd
   annotations:
     helm.sh/resource-policy: keep
+    argocd.argoproj.io/sync-options: Delete=false,Prune=false
 spec:
   destination:
     namespace: {{ .Values.metadata.namespace }} 
