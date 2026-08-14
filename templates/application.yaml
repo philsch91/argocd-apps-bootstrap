@@ -20,7 +20,7 @@ spec:
   {{- if hasKey $source "helm"}}
   - helm:
     {{- if $source.helm.passCredentials }}
-      passCredentials: {{ $source.helm.passCredentials }}  
+      passCredentials: {{ $source.helm.passCredentials }}
     {{- end }}
       valueFiles:
       {{- range $source.helm.valueFiles }}
