@@ -2,6 +2,9 @@
 argocd-apps:
   applications:
     karpenter-nonprod:
+      additionalAnnotations:
+        helm.sh/resource-policy: keep
+        argocd.argoproj.io/sync-options: Delete=false,Prune=false
       namespace: argocd
       destination:
         server: https://kubernetes.default.svc
