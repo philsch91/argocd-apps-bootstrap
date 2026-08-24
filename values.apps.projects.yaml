@@ -2,6 +2,9 @@
 argocd-apps:
   projects:
     kubecost:
+      additionalAnnotations:
+        helm.sh/resource-policy: keep
+        argocd.argoproj.io/sync-options: Delete=false,Prune=false
       description: Project for Kubecost resources
       destinations:
         - namespace: kubecost
